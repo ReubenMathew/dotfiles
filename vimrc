@@ -91,3 +91,11 @@ map <silent> <C-n> :NERDTreeToggle<CR>
 map <silent> <Leader>t :TagbarToggle<CR>
 map <silent> <Leader>F :NERDTreeFind<CR>
 map <silent> <Leader>p :Files<CR>
+inoremap <S-Tab> <Esc>
+onoremap <S-Tab> <Esc>
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
