@@ -27,12 +27,15 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'w0rp/ale'
+" LaTeX support
+Plug 'lervag/vimtex'
+" git plugin
+Plug 'tpope/vim-fugitive'
+" status line
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 " ALE
-let g:ale_sign_error='● '                                  " Use an solid circle symbol for errors in the sign column
-let g:ale_sign_info='‣ '                                   " Use a solid little arrow for 'info' in the sign column
-let g:ale_sign_warning='○ '                                " Use a hollow circle symbol for warnings in the sign column
 let g:ale_sign_column_always=0                             " Don't show the sign column even if there are no linter notes
 let g:ale_lint_on_text_changed=1                           " Don't run the linter whenever the text of a file changes: fights with Deoplete
 let g:ale_lint_on_enter=1                                  " Run the linter whenever a file is opened
@@ -54,3 +57,7 @@ let g:ale_fixers={
 " vim-go
 let g:go_doc_popup_window = 1
 
+map <silent> <C-n> :NERDTreeToggle<CR>
+map <silent> <Leader>t :TagbarToggle<CR>
+map <silent> <Leader>F :NERDTreeFind<CR>
+map <silent> <Leader>p :Files<CR>
