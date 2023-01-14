@@ -33,6 +33,8 @@ Plug 'lervag/vimtex'
 Plug 'tpope/vim-fugitive'
 " status line
 Plug 'vim-airline/vim-airline'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 " coc.vim
@@ -87,10 +89,10 @@ let g:ale_fixers={
 " vim-go
 let g:go_doc_popup_window = 1
 
-map <silent> <C-n> :NERDTreeToggle<CR>
-map <silent> <Leader>t :TagbarToggle<CR>
-map <silent> <Leader>F :NERDTreeFind<CR>
-map <silent> <Leader>p :Files<CR>
+map <silent> <Leader>t :NERDTreeToggle<CR>
+"map <silent> <Leader>t :TagbarToggle<CR>
+"map <silent> <Leader>F :NERDTreeFind<CR>
+"map <silent> <Leader>p :Files<CR>
 inoremap <S-Tab> <Esc>
 onoremap <S-Tab> <Esc>
 
