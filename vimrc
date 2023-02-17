@@ -23,6 +23,7 @@ set number
 set clipboard=unnamed
 set lazyredraw
 set wildmenu
+set autoindent 
 
 "" Filetype specific rules
 "" autocmd FileType go setlocal ts=4sw=4 sts=4 expand
@@ -111,7 +112,7 @@ let g:go_fmt_autosave = 1
 " Run `goimports` on your current file on every save
 let g:go_fmt_command = "goimports"
 " Status line types/signatures
-let g:go_auto_type_info = 1
+let g:go_fmt_command="gopls"
 
 " Snippets
 let g:neosnippet#snippets_directory='~/.vim/plugged/vim-go/gosnippets/snippets'
@@ -161,3 +162,5 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Markdown quick binds
