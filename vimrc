@@ -42,7 +42,13 @@ Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'fatih/molokai'
 call plug#end()
+
+" Colorscheme
+colorscheme molokai
 
 " coc.vim
 " --------
@@ -79,6 +85,14 @@ let g:ale_pattern_options = {
       \'\.md$': {'ale_enabled': 0},
       \'\.go$': {'ale_enabled': 0},
       \}
+
+" Global coc.vim extensions
+let g:coc_global_extensions = [
+      \'coc-html',
+      \'coc-json',
+      \'coc-sh',
+      \'coc-tsserver',
+      \]
 
 " ALE
 let g:ale_sign_column_always=0                             " Don't show the sign column even if there are no linter notes
@@ -163,4 +177,3 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Markdown quick binds
