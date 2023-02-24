@@ -45,6 +45,7 @@ Plug 'preservim/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'fatih/molokai'
+Plug 'vitalk/vim-simple-todo'
 call plug#end()
 
 " Colorscheme
