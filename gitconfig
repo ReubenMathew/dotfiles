@@ -1,0 +1,22 @@
+[filter "lfs"]
+		required = true
+		clean = git-lfs clean -- %f
+		smudge = git-lfs smudge -- %f
+		process = git-lfs filter-process
+
+# Profile Switching
+[include]
+		path = ~/.git-personal.conf
+
+[includeIf "gitdir:~/Synadia/"]
+		path = ~/Synadia/.git-synadia.conf
+[gpg]
+		format = ssh
+
+[alias]
+    graph = log --oneline --graph --decorate
+    fa = fetch --all
+    ff = merge --ff-only
+    cs = commit -S -m 
+		slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
+
