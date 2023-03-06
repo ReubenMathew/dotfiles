@@ -29,6 +29,11 @@ HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 bindkey '\e[A' history-search-backward
 bindkey '\e[B' history-search-forward
+ENABLE_CORRECTION="true"
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Kubectl Autocomplete
+source <(kubectl completion zsh)
 
 # Misc
 setopt NO_BEEP
@@ -42,3 +47,5 @@ setopt NO_BEEP
   #dotenv
   #zsh-syntax-highlighting
 #)
+
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
