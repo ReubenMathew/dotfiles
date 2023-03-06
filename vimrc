@@ -46,6 +46,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'fatih/molokai'
 Plug 'vitalk/vim-simple-todo'
+Plug 'tpope/vim-fugitive'
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 call plug#end()
 
 " Colorscheme
@@ -193,4 +195,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Fugitive Conflict Resolution
+nnoremap <leader>gd :Gvdiff<CR>
 
