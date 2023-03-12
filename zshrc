@@ -2,6 +2,8 @@
 alias dc=docker-compose
 alias run-help=man
 alias which-command=whence
+alias l='ls -l'
+alias clx='clx -n'
 
 # Variables
 export EDITOR=/usr/bin/vim

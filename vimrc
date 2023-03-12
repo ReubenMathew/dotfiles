@@ -25,8 +25,10 @@ set lazyredraw
 set wildmenu
 set autoindent 
 
-"" Filetype specific rules
-"" autocmd FileType go setlocal ts=4sw=4 sts=4 expand
+" Filetype specific rules
+" autocmd FileType go setlocal ts=4 sw=4 sts=4 expand
+autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
 
 " VimPlug
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -38,7 +40,7 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'vim-airline/vim-airline'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
@@ -46,8 +48,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'fatih/molokai'
 Plug 'vitalk/vim-simple-todo'
+Plug 'ekalinin/Dockerfile.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 call plug#end()
 
 " Colorscheme
