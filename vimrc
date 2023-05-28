@@ -1,6 +1,7 @@
-"set nocompatible
+set nocompatible
 
 syntax on
+syntax sync minlines=256
 
 filetype plugin indent on
 
@@ -10,6 +11,8 @@ set shiftwidth=2
 set expandtab
 set noerrorbells
 set backspace=indent,eol,start
+set wrap linebreak
+
 " increase max memory to show syntax highlighting for large files
 set maxmempattern=20000
 set incsearch
@@ -24,11 +27,17 @@ set clipboard=unnamed
 set lazyredraw
 set wildmenu
 set autoindent 
+set nocursorcolumn
+set nocursorline
+set norelativenumber
+set updatetime=300
+set synmaxcol=200
 
-" Filetype specific rules
-" autocmd FileType go setlocal ts=4 sw=4 sts=4 expand
-autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
+" Persistent Undo
+if has('persistent_undo')
+  set undofile
+  set undodir=~/.cache/vim
+endif
 
 " VimPlug
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -40,7 +49,6 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'vim-airline/vim-airline'
-Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
@@ -129,12 +137,12 @@ let g:go_highlight_operators = 1
 " Enable auto formatting on saving
 let g:go_fmt_autosave = 1
 " Run `goimports` on your current file on every save
-let g:go_fmt_command = "goimports"
+"let g:go_fmt_command = "goimports"
 " Status line types/signatures
 let g:go_fmt_command="gopls"
 
 " Snippets
-let g:neosnippet#snippets_directory='~/.vim/plugged/vim-go/gosnippets/snippets'
+"let g:neosnippet#snippets_directory='~/.vim/plugged/vim-go/gosnippets/snippets'
 
 " Go Add Tags
 let g:go_addtags_transform = 'camelcase'
@@ -164,6 +172,12 @@ let g:go_imports_autosave=1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_operators = 1
 
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+
+
+
 let g:go_fold_enable = []
 
 let NERDTreeShowHidden=1 " Show hidden files
@@ -189,8 +203,15 @@ function! s:build_go_files()
   endif
 endfunction
 
-autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
+" Autocommand
+augroup vimrc_autocmd
+  autocmd!
+  "autocmd FileType go setlocal ts=4 sw=4 sts=4 expand
+  autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
+  autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
+  autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+augroup END
 
 " GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
@@ -208,3 +229,21 @@ nnoremap <leader>gd :Gvdiff<CR>
 " Fzf Bindings
 map <c-f> :Rg<CR>
 nnoremap <c-p> :GFiles<CR>
+
+" Performance
+"set timeoutlen=1000
+"set ttimeoutlen=0
+"function! CloseHiddenBuffers()
+    "let open_buffers = []
+
+    "for i in range(tabpagenr('$'))
+        "call extend(open_buffers, tabpagebuflist(i + 1))
+    "endfor
+
+    "for num in range(1, bufnr("$") + 1)
+        "if buflisted(num) && index(open_buffers, num) == -1
+            "exec "bdelete ".num
+        "endif
+    "endfor
+"endfunction
+"au BufEnter * call CloseHiddenBuffers()

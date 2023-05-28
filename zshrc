@@ -4,6 +4,7 @@ alias run-help=man
 alias which-command=whence
 alias l='ls -l'
 alias clx='clx -n'
+alias e='$EDITOR $(gum file)'
 
 # Variables
 export EDITOR=/usr/bin/vim
