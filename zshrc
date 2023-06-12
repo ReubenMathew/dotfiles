@@ -5,6 +5,8 @@ alias which-command=whence
 alias l='ls -l'
 alias clx='clx -n'
 alias e='$EDITOR $(gum file)'
+alias f='$EDITOR $(gum filter)'
+alias cat='bat -P'
 
 # Variables
 export EDITOR=/usr/bin/vim
