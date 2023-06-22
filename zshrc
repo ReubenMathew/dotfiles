@@ -6,11 +6,27 @@ alias l='ls -l'
 alias clx='clx -n'
 alias e='$EDITOR $(gum file)'
 alias f='$EDITOR $(gum filter)'
-alias cat='bat -P'
+alias a='vim ~/Developer/log/worklog/06-2023.md'
+alias ag='git -C ~/Developer/log/ commit -a -m "entry" && git -C ~/Developer/log push'
+alias ga='gumcommit'
+alias python='python3'
+
+
+# Gum Git
+gumcommit() {
+  TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
+
+  # Pre-populate the input with the type(scope): so that the user may change it
+  SUMMARY=$(gum input --value "$TYPE: " --placeholder "Summary of this change")
+  DESCRIPTION=$(gum write --placeholder "Details of this change (CTRL+D to finish)")
+
+  # Commit these changes
+  gum confirm "Commit changes?" && git commit -a -m "$SUMMARY" -m "$DESCRIPTION"
+}
 
 # Variables
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/vim
+export EDITOR=/opt/homebrew/bin/vim
+export VISUAL=/opt/homebrew/bin/vim
 export GOPATH=/Users/reubenninan/go
 
 # PATH
