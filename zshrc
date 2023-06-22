@@ -7,6 +7,9 @@ alias clx='clx -n'
 alias e='$EDITOR $(gum file)'
 alias f='$EDITOR $(gum filter)'
 alias cat='bat -P'
+alias a='vim ~/Developer/log/worklog/06-2023.md'
+alias ag='git -C ~/Developer/log/ commit -a -m "entry" && git -C ~/Developer/log push'
+
 
 # Variables
 export EDITOR=/usr/bin/vim
