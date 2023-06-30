@@ -231,23 +231,11 @@ nnoremap <leader>gd :Gvdiff<CR>
 map <c-f> :Rg<CR>
 nnoremap <c-p> :GFiles<CR>
 
-" Performance
-set timeoutlen=1000
-set ttimeoutlen=0
-function! CloseHiddenBuffers()
-    let open_buffers = []
-
-    for i in range(tabpagenr('$'))
-        call extend(open_buffers, tabpagebuflist(i + 1))
-    endfor
-
-    for num in range(1, bufnr("$") + 1)
-        if buflisted(num) && index(open_buffers, num) == -1
-            exec "bdelete ".num
-        endif
-    endfor
-endfunction
-au BufEnter * call CloseHiddenBuffers()
+" Move lines up/down
+nnoremap <A-up> :m-2<CR>
+nnoremap <A-Down> :m+<CR>
+inoremap <A-Up> <Esc>:m-2<CR>
+inoremap <A-Down> <Esc>:m+<CR>
 
 " Context Package
 let g:context_enabled = 0
