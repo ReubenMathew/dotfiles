@@ -1,7 +1,7 @@
 set nocompatible
 
 syntax on
-"syntax sync minlines=256
+syntax sync minlines=256
 
 filetype plugin indent on
 
@@ -12,13 +12,6 @@ set expandtab
 set noerrorbells
 set backspace=indent,eol,start
 set wrap linebreak
-
-" performance related
-set re=1
-set ttyfast
-set lazyredraw
-set updatetime=300
-set synmaxcol=200
 
 " increase max memory to show syntax highlighting for large files
 set maxmempattern=20000
@@ -31,11 +24,14 @@ set showcmd
 set cursorline
 set number
 set clipboard=unnamed
+set lazyredraw
 set wildmenu
 set autoindent 
 set nocursorcolumn
 set nocursorline
 set norelativenumber
+set updatetime=300
+set synmaxcol=200
 
 " Persistent Undo
 if has('persistent_undo')
@@ -62,11 +58,9 @@ Plug 'vitalk/vim-simple-todo'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'rhysd/conflict-marker.vim'
+Plug 'neoclide/coc.nvim'
+Plug 'CoderCookE/vim-chatgpt'
 Plug 'wellle/context.vim'
-Plug 'tpope/vim-surround'
-" clojure support
-Plug 'tpope/vim-fireplace'
-Plug 'guns/vim-clojure-static'
 call plug#end()
 
 " Colorscheme
@@ -77,7 +71,7 @@ colorscheme molokai
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file
-" NOTE: Use command ':verbose imap "tab"' to make sure tab is not mapped by
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
@@ -105,7 +99,7 @@ endif
 " Disable linting for the following files
 let g:ale_pattern_options = {
       \'\.md$': {'ale_enabled': 0},
-      \'\.go$': {'ale_enabled': 1},
+      \'\.go$': {'ale_enabled': 0},
       \}
 
 " Global coc.vim extensions
@@ -181,11 +175,9 @@ let g:go_imports_autosave=1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_operators = 1
 
-let g:go_highlight_types = 0
-let g:go_highlight_fields = 0
-let g:go_highlight_functions = 0
-
-
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
 
 let g:go_fold_enable = []
 
