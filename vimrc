@@ -53,7 +53,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
-Plug 'fatih/molokai'
 Plug 'vitalk/vim-simple-todo'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -61,10 +60,24 @@ Plug 'rhysd/conflict-marker.vim'
 Plug 'neoclide/coc.nvim'
 Plug 'CoderCookE/vim-chatgpt'
 Plug 'wellle/context.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'rose-pine/vim'
 call plug#end()
 
 " Colorscheme
-colorscheme molokai
+set background=dark
+colorscheme rosepine
+function! ToggleBackgroundMode()
+  if (&background == "light")
+    set background=dark 
+    colorscheme rosepine
+  else
+    set background=light 
+    colorscheme rosepine_dawn
+  endif
+endfunction
+nnoremap <leader>z :call ToggleBackgroundMode()<CR>
+
 
 " coc.vim
 " --------
@@ -137,12 +150,9 @@ let g:go_highlight_functions = 1
 let g:go_highlight_function_calls = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_operators = 1
+let g:go_fmt_command="gopls"
 " Enable auto formatting on saving
 let g:go_fmt_autosave = 1
-" Run `goimports` on your current file on every save
-"let g:go_fmt_command = "goimports"
-" Status line types/signatures
-let g:go_fmt_command="gopls"
 
 " Snippets
 "let g:neosnippet#snippets_directory='~/.vim/plugged/vim-go/gosnippets/snippets'
@@ -198,7 +208,7 @@ let g:go_debug_windows = {
 function! s:build_go_files()
   let l:file = expand('%')
   if l:file =~# '^\f\+_test\.go$'
-    call go#test#Test(0, 1)
+    call go#test#Test(0, 0)
   elseif l:file =~# '^\f\+\.go$'
     call go#cmd#Build(0)
   endif
@@ -212,6 +222,8 @@ augroup vimrc_autocmd
   autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
   autocmd FileType go nmap <leader>r  <Plug>(go-run)
+  autocmd FileType go nnoremap <Leader>c <Plug>(go-coverage-toggle)
+  autocmd FileType go nmap <Leader>a <Plug>(go-alternate-vertical)
 augroup END
 
 " GoTo code navigation
@@ -237,5 +249,26 @@ nnoremap <A-Down> :m+<CR>
 inoremap <A-Up> <Esc>:m-2<CR>
 inoremap <A-Down> <Esc>:m+<CR>
 
-" Context Package
-let g:context_enabled = 0
+" Insert Timestamp (current)
+nnoremap <c-t> :r! date "+\%m-\%d-\%Y \%H:\%M:\%S"<CR>
+nnoremap <c-T> :r! date "+\%m-\%d-\%Y"<CR>
+
+" Performance
+"set timeoutlen=1000
+"set ttimeoutlen=0
+"function! CloseHiddenBuffers()
+    "let open_buffers = []
+
+    "for i in range(tabpagenr('$'))
+        "call extend(open_buffers, tabpagebuflist(i + 1))
+    "endfor
+
+    "for num in range(1, bufnr("$") + 1)
+        "if buflisted(num) && index(open_buffers, num) == -1
+            "exec "bdelete ".num
+        "endif
+    "endfor
+"endfunction
+"au BufEnter * call CloseHiddenBuffers()
+
+" ------------------------------------------------"
