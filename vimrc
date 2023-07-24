@@ -64,20 +64,25 @@ Plug 'tpope/vim-fugitive'
 Plug 'rose-pine/vim'
 call plug#end()
 
-" Colorscheme
-set background=dark
-colorscheme rosepine
+" Colorscheme Toggle
 function! ToggleBackgroundMode()
   if (&background == "light")
-    set background=dark 
+    let g:disable_bg = 1
+    set background=dark
     colorscheme rosepine
   else
-    set background=light 
+    let g:disable_bg = 0
+    set background=light
     colorscheme rosepine_dawn
   endif
 endfunction
 nnoremap <leader>z :call ToggleBackgroundMode()<CR>
 
+" Colorscheme Settings
+let g:disable_bg = 1
+let g:disable_float_bg = 1
+colorscheme rosepine
+set background=dark
 
 " coc.vim
 " --------
