@@ -6,40 +6,28 @@ alias l='ls -l'
 alias clx='clx -n'
 alias e='$EDITOR $(gum file)'
 alias f='$EDITOR $(gum filter)'
-alias a='vim ~/Developer/log/worklog/06-2023.md'
-alias ag='git -C ~/Developer/log/ commit -a -m "entry" && git -C ~/Developer/log push'
-alias ga='gumcommit'
+alias chat='gum input | chatgpt -p '
 alias python='python3'
-
-
-# Gum Git
-gumcommit() {
-  TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
-
-  # Pre-populate the input with the type(scope): so that the user may change it
-  SUMMARY=$(gum input --value "$TYPE: " --placeholder "Summary of this change")
-  DESCRIPTION=$(gum write --placeholder "Details of this change (CTRL+D to finish)")
-
-  # Commit these changes
-  gum confirm "Commit changes?" && git commit -a -m "$SUMMARY" -m "$DESCRIPTION"
-}
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/08-2023.md'
+alias ag='git -C ~/Developer/log/ commit -a -m "auto entry" && git -C ~/Developer/log push'
+alias dark='kitty +kitten themes --reload-in=all Rosé Pine'
+alias light='kitty +kitten themes --reload-in=all Rosé Pine Dawn'
+alias boot='glow ~/praathana.md'
 
 # Variables
 export EDITOR=/opt/homebrew/bin/vim
 export VISUAL=/opt/homebrew/bin/vim
 export GOPATH=/Users/reubenninan/go
+export XDG_CONFIG_HOME=/Users/reubenninan/.config
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 # PATH
 export PATH=/Users/reubenninan/.krew/bin:/Users/reubenninan/.gem/ruby/3.1.3/bin:/Users/reubenninan/.rubies/ruby-3.1.3/lib/ruby/gems/3.1.0/bin:/Users/reubenninan/.rubies/ruby-3.1.3/bin:/usr/local/opt/llvm/bin:/Users/reubenninan/go/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/reubenninan/.cargo/bin:/Users/reubenninan/bin
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # Starship
 eval "$(starship init zsh)"
 export STARSHIP_SHELL=zsh
-
-# Ruby
-source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
-chruby ruby-3.1.3
 
 # Autocomplete
 autoload -Uz compinit && compinit
@@ -49,6 +37,8 @@ SAVEHIST=1000
 HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 bindkey '\e[A' history-search-backward
+
+
 bindkey '\e[B' history-search-forward
 ENABLE_CORRECTION="true"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -59,14 +49,3 @@ source <(kubectl completion zsh)
 # Misc
 setopt NO_BEEP
 
-# oh-my-zsh
-#plugins=(
-  #zsh-autosuggestions
-  #npm
-  #ruby
-  #git
-  #dotenv
-  #zsh-syntax-highlighting
-#)
-
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
