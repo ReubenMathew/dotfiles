@@ -1,10 +1,10 @@
 set nocompatible
 
 syntax on
-syntax sync minlines=256
 
 filetype plugin indent on
 
+set laststatus=2
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
@@ -14,7 +14,8 @@ set backspace=indent,eol,start
 set wrap linebreak
 
 " increase max memory to show syntax highlighting for large files
-set maxmempattern=20000
+set maxmempattern=30000
+set re=0
 set incsearch
 set hlsearch
 set mouse=a
@@ -32,6 +33,7 @@ set nocursorline
 set norelativenumber
 set updatetime=300
 set synmaxcol=200
+set ttyfast
 
 " Persistent Undo
 if has('persistent_undo')
@@ -42,14 +44,13 @@ endif
 " VimPlug
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl  -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
 endif
 
 call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
-Plug 'vim-airline/vim-airline'
-Plug 'sheerun/vim-polyglot'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -57,32 +58,38 @@ Plug 'vitalk/vim-simple-todo'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'rhysd/conflict-marker.vim'
-Plug 'neoclide/coc.nvim'
-Plug 'CoderCookE/vim-chatgpt'
 Plug 'wellle/context.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'itchyny/lightline.vim'
 Plug 'rose-pine/vim'
+"Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 call plug#end()
 
-" Colorscheme Toggle
-function! ToggleBackgroundMode()
-  if (&background == "light")
-    let g:disable_bg = 1
-    set background=dark
-    colorscheme rosepine
-  else
-    let g:disable_bg = 0
-    set background=light
-    colorscheme rosepine_dawn
-  endif
-endfunction
-nnoremap <leader>z :call ToggleBackgroundMode()<CR>
 
 " Colorscheme Settings
-let g:disable_bg = 1
 let g:disable_float_bg = 1
-colorscheme rosepine
-set background=dark
+
+" Get Kitty Background Color
+" requires:
+"   - rose pine background
+"   - kitty remote control
+function! UpdateBackground()
+  let background_color = trim(system('kitty @ get-colors | grep -w "background" | awk "{print \$2}"'))
+
+  if (background_color == "#faf4ed")
+    " switch to light
+    set background=light
+    colorscheme rosepine_dawn
+    let g:lightline = { 'colorscheme': 'rosepine_dawn' }
+  else
+    " switch to dark
+    set background=dark
+    colorscheme rosepine
+    let g:lightline = { 'colorscheme': 'rosepine' }
+  endif
+endfunction
+nnoremap <silent><leader>z :call UpdateBackground()<CR>
+
 
 " coc.vim
 " --------
@@ -100,7 +107,22 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-			      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+nnoremap <silent> K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+nnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+nnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
+inoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+vnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -114,40 +136,14 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Disable linting for the following files
-let g:ale_pattern_options = {
-      \'\.md$': {'ale_enabled': 0},
-      \'\.go$': {'ale_enabled': 0},
-      \}
-
 " Global coc.vim extensions
-let g:coc_global_extensions = [
-      \'coc-html',
-      \'coc-json',
-      \'coc-sh',
-      \'coc-tsserver',
-      \]
+"let g:coc_global_extensions = [
+      "\'coc-html',
+      "\'coc-json',
+      "\'coc-sh',
+      "\'coc-tsserver',
+      "\]
 
-" ALE
-let g:ale_sign_column_always=0                             " Don't show the sign column even if there are no linter notes
-let g:ale_lint_on_text_changed=1                           " Don't run the linter whenever the text of a file changes: fights with Deoplete
-let g:ale_lint_on_enter=1                                  " Run the linter whenever a file is opened
-let g:ale_lint_on_save=1                                   " Run the linter whenever a file is saved
-
-" It may be nice to highlight the actual error here too - drop the 'sign' part
-highlight ALEErrorSign        ctermfg=1
-highlight ALEWarningSign      ctermfg=3
-highlight ALEInfoSign         ctermfg=4
-highlight ALEStyleErrorSign   ctermfg=3
-highlight ALEStyleWarningSign ctermfg=3
-
-highlight ALEError ctermbg=none cterm=underline ctermfg=1
-
-let g:ale_fixers={
-      \ 'go': ['gofmt'],
-      \}
-
-" vim-go
 " VIM-GO CONFIGS
 " Syntax highlighting
 let g:go_highlight_fields = 1
@@ -164,12 +160,14 @@ let g:go_fmt_autosave = 1
 
 " Go Add Tags
 let g:go_addtags_transform = 'camelcase'
-noremap gat :GoAddTags<cr>
 let g:go_fmt_fail_silently = 1
 let g:go_debug_windows = {
-     "\ 'vars':  'leftabove 35vnew',
-     "\ 'stack': 'botright 10new',
-\ }
+      "\ 'vars':  'leftabove 35vnew',
+      "\ 'stack': 'botright 10new',
+      \ }
+
+noremap gat :GoAddTags<CR>
+nnoremap gfs :GoFillStruct<CR>
 
 let g:go_test_show_name = 1
 let g:go_list_type = "quickfix"
@@ -206,7 +204,7 @@ onoremap <S-Tab> <Esc>
 let g:go_debug_windows = {
       \ 'vars':  'leftabove 35vnew',
       \ 'stack': 'botright 10new',
-\ }
+      \ }
 
 " vim-go quick binds
 " run :GoBuild or :GoTestCompile based on the go file
@@ -222,13 +220,16 @@ endfunction
 " Autocommand
 augroup vimrc_autocmd
   autocmd!
-  "autocmd FileType go setlocal ts=4 sw=4 sts=4 expand
+  "autocmd FileType go setlocal ts=4 sw=4 sts=4 expa
+  " background color updater
+  au BufEnter * call UpdateBackground()
+
   autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
   autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
   autocmd FileType go nmap <leader>r  <Plug>(go-run)
   autocmd FileType go nnoremap <Leader>c <Plug>(go-coverage-toggle)
-  autocmd FileType go nmap <Leader>a <Plug>(go-alternate-vertical)
+  autocmd FileType go nmap <Leader>s <Plug>(go-alternate-vertical)
 augroup END
 
 " GoTo code navigation
@@ -237,16 +238,47 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)<CR>
+nmap <leader>a  <Plug>(coc-codeaction-selected)<CR>
+
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" Apply the most preferred quickfix action to fix diagnostic on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap keys for applying refactor code actions
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+" JAVA CONFIG
+au FileType java set colorcolumn=100
+autocmd BufWritePre *.java call CocAction('format')
+
+" RUST CONFIG
+au FileType rust set colorcolumn=100
+let g:rustfmt_autosave = 1
+
 " Fugitive Conflict Resolution
 nnoremap <leader>gd :Gvdiff<CR>
+
+" Vim Context
+let g:context_enabled = 1
 
 " Ctrl-P Bindings
 "let g:ctrlp_map = '<c-p>'
 "let g:ctrlp_cmd = 'CtrlP'
 
 " Fzf Bindings
-map <c-f> :Rg<CR>
 nnoremap <c-p> :GFiles<CR>
+map <c-f> :Rg<CR>
 
 " Move lines up/down
 nnoremap <A-up> :m-2<CR>
@@ -255,25 +287,26 @@ inoremap <A-Up> <Esc>:m-2<CR>
 inoremap <A-Down> <Esc>:m+<CR>
 
 " Insert Timestamp (current)
-nnoremap <c-t> :r! date "+\%m-\%d-\%Y \%H:\%M:\%S"<CR>
-nnoremap <c-T> :r! date "+\%m-\%d-\%Y"<CR>
+nnoremap <c-T> :r! date "+\%m-\%d-\%Y \%H:\%M:\%S"<CR>
 
 " Performance
 "set timeoutlen=1000
 "set ttimeoutlen=0
 "function! CloseHiddenBuffers()
-    "let open_buffers = []
+  "let open_buffers = []
 
-    "for i in range(tabpagenr('$'))
-        "call extend(open_buffers, tabpagebuflist(i + 1))
-    "endfor
+  "for i in range(tabpagenr('$'))
+    "call extend(open_buffers, tabpagebuflist(i + 1))
+  "endfor
 
-    "for num in range(1, bufnr("$") + 1)
-        "if buflisted(num) && index(open_buffers, num) == -1
-            "exec "bdelete ".num
-        "endif
-    "endfor
+  "for num in range(1, bufnr("$") + 1)
+    "if buflisted(num) && index(open_buffers, num) == -1
+      "exec "bdelete ".num
+    "endif
+  "endfor
 "endfunction
 "au BufEnter * call CloseHiddenBuffers()
 
 " ------------------------------------------------"
+" Copilot
+let g:copilot_enabled = v:false
