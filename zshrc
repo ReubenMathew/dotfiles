@@ -3,12 +3,12 @@ alias dc=docker-compose
 alias run-help=man
 alias which-command=whence
 alias l='ls -l'
-alias clx='clx -n'
+alias cdt='cd $(mktemp -d)'
 alias e='$EDITOR $(gum file)'
 alias f='$EDITOR $(gum filter)'
 alias chat='gum input | chatgpt -p '
 alias python='python3'
-alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/08-2023.md'
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/09-2023.md'
 alias ag='git -C ~/Developer/log/ commit -a -m "auto entry" && git -C ~/Developer/log push'
 alias dark='kitty +kitten themes --reload-in=all Rosé Pine'
 alias light='kitty +kitten themes --reload-in=all Rosé Pine Dawn'
@@ -49,3 +49,5 @@ source <(kubectl completion zsh)
 # Misc
 setopt NO_BEEP
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

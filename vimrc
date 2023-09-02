@@ -1,6 +1,8 @@
 set nocompatible
 
-syntax on
+syntax enable
+set synmaxcol=9999
+syntax sync minlines=256
 
 filetype plugin indent on
 
@@ -15,7 +17,7 @@ set wrap linebreak
 
 " increase max memory to show syntax highlighting for large files
 set maxmempattern=30000
-set re=0
+set re=1
 set incsearch
 set hlsearch
 set mouse=a
@@ -26,14 +28,19 @@ set cursorline
 set number
 set clipboard=unnamed
 set lazyredraw
+set redrawtime=4000
 set wildmenu
 set autoindent 
 set nocursorcolumn
 set nocursorline
 set norelativenumber
 set updatetime=300
-set synmaxcol=200
 set ttyfast
+set shell=/bin/zsh
+
+" Enable omni completion and enable more characters to be available within
+" autocomplete by appending to the 'iskeyword' variable.
+set iskeyword+=-
 
 " Persistent Undo
 if has('persistent_undo')
@@ -49,8 +56,12 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+" Kitty Interop
+Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
+
+
 " LSP Plugins
-Plug 'neoclide/coc.nvim', {'for': ['go', 'rust', 'sh'], 'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
 " Utilities
@@ -79,33 +90,46 @@ call plug#end()
 " Register the components:
 let g:lightline = {}
 let g:lightline.component_expand = {
-  \   'linter_warnings': 'lightline#coc#warnings',
-  \   'linter_errors': 'lightline#coc#errors',
-  \   'linter_info': 'lightline#coc#info',
-  \   'linter_hints': 'lightline#coc#hints',
-  \   'linter_ok': 'lightline#coc#ok',
-  \   'status': 'lightline#coc#status',
-  \ }
+      \   'linter_warnings': 'lightline#coc#warnings',
+      \   'linter_errors': 'lightline#coc#errors',
+      \   'linter_info': 'lightline#coc#info',
+      \   'linter_hints': 'lightline#coc#hints',
+      \   'linter_ok': 'lightline#coc#ok',
+      \   'status': 'lightline#coc#status',
+      \ }
 
 " Set color to the components:
 let g:lightline.component_type = {
-  \   'linter_warnings': 'warning',
-  \   'linter_errors': 'error',
-  \   'linter_info': 'info',
-  \   'linter_hints': 'hints',
-  \   'linter_ok': 'left',
-  \ }
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_info': 'info',
+      \   'linter_hints': 'hints',
+      \   'linter_ok': 'left',
+      \ }
 
 " Add the components to the lightline:
 let g:lightline.active = {
-  \   'left': [[ 'coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]]
-  \ }
+      \   'left': [ [ 'coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ],
+      \             [ 'coc_status'  ],
+      \             [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ }
+
+" Git Fugitive - lightline integration
+let g:lightline.component_function = {
+      \   'component_function': {
+      \     'gitbranch': 'FugitiveHead',
+      \     'coc_status': 'coc#status',
+      \   }
+      \ }
+
 " register compoments:
 call lightline#coc#register()
 " ----------------------------------
 
 " ----------------------------------
 " Colorscheme Settings
+
 let g:disable_float_bg = 1
 
 " Get Kitty Background Color
@@ -113,6 +137,7 @@ let g:disable_float_bg = 1
 "   - rose pine background
 "   - kitty remote control
 function! UpdateBackground()
+
   let background_color = trim(system('kitty @ get-colors | grep -w "background" | awk "{print \$2}"'))
 
   if (background_color == "#faf4ed")
@@ -126,6 +151,14 @@ function! UpdateBackground()
     colorscheme rosepine
     let g:lightline.colorscheme = 'rosepine'
   endif
+  " Reload lightline
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+
+  " transparent background
+  hi Normal guibg=NONE ctermbg=NONE
+
 endfunction
 nnoremap <silent><leader>z :call UpdateBackground()<CR>
 " ----------------------------------
@@ -167,6 +200,7 @@ function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+let g:coc_snippet_next = '<tab>'
 
 " Use <c-space> to trigger completion
 if has('nvim')
@@ -197,11 +231,15 @@ augroup vimrc_autocmd
   autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
 
   " ------ Go ------ "
+  autocmd BufNewFile,BufRead,BufEnter *.go set filetype=go
   " Go Add Tags
   autocmd FileType go nnoremap gat :CocCommand go.tags.add json<cr>
   " Add missing imports on save
   autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
   autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.formatDocument')
+
+  " Lightline update on coc status change
+  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 augroup END
 
 " GoTo code navigation
@@ -254,8 +292,13 @@ inoremap <A-Up> <Esc>:m-2<CR>
 inoremap <A-Down> <Esc>:m+<CR>
 
 " Insert Timestamp (current)
-nnoremap <c-T> :r! date "+\%m-\%d-\%Y \%H:\%M:\%S"<CR>
+autocmd FileType md nnoremap <c-T> :r! date "+\%m-\%d-\%Y \%H:\%M:\%S"<CR>
+autocmd FileType md nnoremap <c-C> :r! ~/Developer/log/misc/checklist_template.md <CR>
 
 " ------------------------------------------------"
 " Copilot
 let g:copilot_enabled = v:false
+
+" ------------------------------------------------"
+" Simple ToDo
+let g:simple_todo_list_symbol = '-'
