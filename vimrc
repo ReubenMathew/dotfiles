@@ -216,9 +216,13 @@ endif
 " NERDTree Open/Close
 map <silent> <Leader>t :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1 " Show hidden files
+
 " Remap escape key
 inoremap <S-Tab> <Esc>
 onoremap <S-Tab> <Esc>
+
+" ; same as :
+nnoremap ; :
 
 " Autocommand
 augroup vimrc_autocmd

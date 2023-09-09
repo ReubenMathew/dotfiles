@@ -4,8 +4,6 @@ alias run-help=man
 alias which-command=whence
 alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
-alias e='$EDITOR $(gum file)'
-alias f='$EDITOR $(gum filter)'
 alias chat='gum input | chatgpt -p '
 alias python='python3'
 alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/09-2023.md'
@@ -37,8 +35,6 @@ SAVEHIST=1000
 HISTSIZE=999
 setopt HIST_EXPIRE_DUPS_FIRST
 bindkey '\e[A' history-search-backward
-
-
 bindkey '\e[B' history-search-forward
 ENABLE_CORRECTION="true"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -49,5 +45,5 @@ source <(kubectl completion zsh)
 # Misc
 setopt NO_BEEP
 
-
+# fuzzy-finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
