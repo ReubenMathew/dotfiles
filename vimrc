@@ -215,11 +215,15 @@ endif
 
 " NERDTree Open/Close
 map <silent> <Leader>t :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1 " Show hidden files
+" Show hidden files
+let NERDTreeShowHidden=1 
 
 " Remap escape key
 inoremap <S-Tab> <Esc>
 onoremap <S-Tab> <Esc>
+
+" NOH on Escape
+nnoremap <silent> <Esc> :noh<CR>
 
 " ; same as :
 nnoremap ; :

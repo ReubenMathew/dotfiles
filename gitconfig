@@ -8,8 +8,8 @@
 [include]
 		path = ~/.git-personal.conf
 
-[includeIf "gitdir:~/Synadia/"]
-		path = ~/Synadia/.git-synadia.conf
+[includeIf "gitdir:~/Developer/Synadia/"]
+		path = ~/Developer/Synadia/.git-synadia.conf
 [gpg]
 		format = ssh
 
@@ -17,6 +17,6 @@
     graph = log --oneline --graph --decorate
     fa = fetch --all
     ff = merge --ff-only
-    cs = commit -S -m 
+    cs = commit -s -S -m 
 		slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
 

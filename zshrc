@@ -6,22 +6,24 @@ alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
 alias chat='gum input | chatgpt -p '
 alias python='python3'
-alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/09-2023.md'
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/10-2023.md'
 alias ag='git -C ~/Developer/log/ commit -a -m "auto entry" && git -C ~/Developer/log push'
-alias dark='kitty +kitten themes --reload-in=all Rosé Pine'
-alias light='kitty +kitten themes --reload-in=all Rosé Pine Dawn'
 alias boot='glow ~/praathana.md'
+alias ssh="kitty +kitten ssh"
+alias nv="nvim"
 
 # Variables
 export EDITOR=/opt/homebrew/bin/vim
 export VISUAL=/opt/homebrew/bin/vim
 export GOPATH=/Users/reubenninan/go
 export XDG_CONFIG_HOME=/Users/reubenninan/.config
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=$(/usr/libexec/java_home -v 18.0)
 
 # PATH
 export PATH=/Users/reubenninan/.krew/bin:/Users/reubenninan/.gem/ruby/3.1.3/bin:/Users/reubenninan/.rubies/ruby-3.1.3/lib/ruby/gems/3.1.0/bin:/Users/reubenninan/.rubies/ruby-3.1.3/bin:/usr/local/opt/llvm/bin:/Users/reubenninan/go/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/reubenninan/.cargo/bin:/Users/reubenninan/bin
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+# Cmake
+export PATH="/Applications/CMake.app/Contents/bin:$PATH"
 
 # Starship
 eval "$(starship init zsh)"
