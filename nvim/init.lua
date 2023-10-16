@@ -91,7 +91,20 @@ require("lazy").setup({
 		})
 	  end
 	},
+	{ 'github/copilot.vim' },
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+	},
+	{ 'mfussenegger/nvim-dap' },
+	{ 'leoluz/nvim-dap-go' },
 })
+
+-- DAP Debugger
+require('dap-go').setup()
+
+-- todo-comments
+require('todo-comments').setup()
 
 -- lua_line
 require('lualine').setup {
@@ -104,7 +117,7 @@ require('lualine').setup {
       { 'mode', separator = { left = '' }, right_padding = 2 },
     },
     lualine_b = { 'filename', 'branch' },
-    lualine_c = { 'diagnostics' },
+    lualine_c = { 'diagnostics', 'diff' },
     lualine_x = {},
     lualine_y = { 'filetype', 'fileformat', 'progress' },
     lualine_z = {
@@ -181,6 +194,8 @@ vim.o.termguicolors = true
 -- Status Line
 vim.opt.laststatus = 3 -- Or 3 for global statusline
 vim.opt.statusline = " %f %m %= %l:%c "
+-- Copilot
+vim.g.copilot_enabled = false
 
 -- MAPPINGS
 --- Remap escape
@@ -194,8 +209,8 @@ vim.keymap.set('n', '<c-p>', builtin.find_files, {})
 vim.keymap.set('n', '<c-g>', builtin.git_files, {})
 vim.keymap.set('n', '<c-f>', builtin.live_grep, {})
 --- NvimTree
-local api = require("nvim-tree.api")
-vim.keymap.set("n", "<leader>t", api.tree.toggle, {})
+--local api = require("nvim-tree.api")
+vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", {silent = true})
 
 -- LSP
 --- Setup
