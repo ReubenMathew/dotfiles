@@ -229,8 +229,9 @@ vim.keymap.set("n", "<c-p>", builtin.find_files, {})
 vim.keymap.set("n", "<c-g>", builtin.git_files, {})
 vim.keymap.set("n", "<c-f>", builtin.live_grep, {})
 --- NvimTree
---local api = require("nvim-tree.api")
 vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", { silent = true })
+--- Trouble
+vim.keymap.set("n", "<c-t>", ":TroubleToggle<CR>", { silent = true })
 
 -- LSP
 --- Setup
