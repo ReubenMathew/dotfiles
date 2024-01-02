@@ -26,7 +26,7 @@ require("lazy").setup({
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
-				ensure_installed = { "c", "lua", "vim", "vimdoc", "go", "rust", "css", "javascript", "html" },
+				ensure_installed = { "c", "lua", "vim", "vimdoc", "go", "rust", "css", "javascript", "html", "javascript", "typescript" },
 				sync_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
@@ -116,7 +116,9 @@ require("lazy").setup({
 })
 
 -- Nvim Notify
-vim.notify = require("notify")
+require("notify").setup({
+	background_color = "#000000",
+})
 
 -- DAP Debugger
 require("dap-go").setup()
@@ -165,7 +167,6 @@ null_ls.setup({
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.gofmt,
 		null_ls.builtins.code_actions.impl,
-		null_ls.builtins.code_actions.refactoring,
 		null_ls.builtins.code_actions.gomodifytags,
 		null_ls.builtins.completion.spell,
 		null_ls.builtins.diagnostics.shellcheck,
@@ -241,12 +242,16 @@ lsp_zero.on_attach(function(client, bufnr)
 	-- to learn the available actions
 	lsp_zero.default_keymaps({ buffer = bufnr })
 	vim.keymap.set({ "n", "v" }, "<leader>a", vim.lsp.buf.code_action, { buffer = bufnr })
+	vim.keymap.set({ "n", "v", "i" }, "<c-s>", vim.lsp.buf.format, { buffer = bufnr })
 	vim.keymap.set({ "n" }, "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr })
 end)
---- Autocmds
-vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.format()]])
 --- Language Servers
+require("lspconfig").jedi_language_server.setup({})
+require("lspconfig").yamlls.setup({})
+require("lspconfig").bashls.setup({})
+require("lspconfig").html.setup({})
 require("lspconfig").tsserver.setup({})
+require("lspconfig").denols.setup({})
 require("lspconfig").rust_analyzer.setup({})
 require("lspconfig").gopls.setup({
 	cmd = { "gopls" },
@@ -264,7 +269,6 @@ require("lspconfig").gopls.setup({
 		usePlaceholders = true,
 	},
 })
-require("lspconfig").bashls.setup({})
 require("lspconfig").jdtls.setup({})
 require("lspconfig").lua_ls.setup({
 	on_init = function(client)
@@ -296,6 +300,10 @@ require("lspconfig").lua_ls.setup({
 		return true
 	end,
 })
+
+-- Autocmds
+--- Formatting
+vim.cmd([[autocmd BufWritePre rust,go,java,html,js,sh lua vim.lsp.buf.format()]])
 
 -- Autocompletion
 local cmp = require("cmp")

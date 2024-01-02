@@ -9,5 +9,8 @@
   "workspace.library": [
     "$VIMRUNTIME",
     "./lua"
-  ]
+  ],
+    "diagnostics.disable": [
+        "unused-local"
+    ]
 }
