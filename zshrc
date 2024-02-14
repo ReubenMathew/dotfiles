@@ -4,11 +4,9 @@ alias run-help=man
 alias which-command=whence
 alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
-alias chat='gum input | chatgpt -p '
 alias python='python3'
-alias a='cd ~/Developer/log && kitty @ set-tab-title Log && vim ~/Developer/log/worklog/01-2024.md'
-alias ag='git commit -a -m "auto entry" && git push'
-alias boot='glow ~/praathana.md'
+alias a='cd ~/Developer/log && kitty @ set-tab-title Log && vim ~/Developer/log/worklog/02-2024.md'
+alias ag='git add worklog && git commit -m "auto entry" && git push'
 alias ssh="kitty +kitten ssh"
 alias nv="nvim"
 

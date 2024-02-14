@@ -26,7 +26,19 @@ require("lazy").setup({
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
-				ensure_installed = { "c", "lua", "vim", "vimdoc", "go", "rust", "css", "javascript", "html", "javascript", "typescript" },
+				ensure_installed = {
+					"c",
+					"lua",
+					"vim",
+					"vimdoc",
+					"go",
+					"rust",
+					"css",
+					"javascript",
+					"html",
+					"javascript",
+					"typescript",
+				},
 				sync_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
@@ -79,7 +91,6 @@ require("lazy").setup({
 	},
 	{ "lewis6991/gitsigns.nvim" },
 	{ "nvim-treesitter/nvim-treesitter-context" },
-	{ "rcarriga/nvim-notify" },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "ColorScheme",
@@ -97,31 +108,18 @@ require("lazy").setup({
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	{ "mfussenegger/nvim-dap" },
-	{ "leoluz/nvim-dap-go" },
-	{
-		"ThePrimeagen/refactoring.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		config = function()
-			require("refactoring").setup()
-		end,
-	},
 	{
 		"stevearc/dressing.nvim",
 		opts = {},
 	},
+	{
+		"olexsmir/gopher.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+	},
 })
-
--- Nvim Notify
-require("notify").setup({
-	background_color = "#000000",
-})
-
--- DAP Debugger
-require("dap-go").setup()
 
 -- todo-comments
 require("todo-comments").setup()
@@ -181,9 +179,9 @@ require("rose-pine").setup({
 	--- @usage 'main'|'moon'|'dawn'
 	dark_variant = "main",
 	bold_vert_split = false,
-	dim_nc_background = false,
-	disable_background = true,
-	disable_float_background = true,
+	dim_nc_background = true,
+	disable_background = false,
+	disable_float_background = false,
 	disable_italics = true,
 
 	highlight_groups = {
@@ -198,7 +196,7 @@ require("rose-pine").setup({
 	},
 })
 --- Set colorscheme after options
-vim.cmd("colorscheme rose-pine")
+vim.cmd.colorscheme("rose-pine")
 
 -- VIM OPTIONS
 --- Tab Sizing
@@ -233,6 +231,8 @@ vim.keymap.set("n", "<c-f>", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", { silent = true })
 --- Trouble
 vim.keymap.set("n", "<c-t>", ":TroubleToggle<CR>", { silent = true })
+--- Toggle light/dark mode
+vim.keymap.set("n", "<leader>l", ":lua toggle_theme()<CR>", { silent = true })
 
 -- LSP
 --- Setup
@@ -246,6 +246,7 @@ lsp_zero.on_attach(function(client, bufnr)
 	vim.keymap.set({ "n" }, "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr })
 end)
 --- Language Servers
+require("lspconfig").terraformls.setup({})
 require("lspconfig").jedi_language_server.setup({})
 require("lspconfig").yamlls.setup({})
 require("lspconfig").bashls.setup({})
@@ -303,7 +304,7 @@ require("lspconfig").lua_ls.setup({
 
 -- Autocmds
 --- Formatting
-vim.cmd([[autocmd BufWritePre rust,go,java,html,js,sh lua vim.lsp.buf.format()]])
+vim.cmd([[autocmd BufWritePre rust,go,java,html,js,sh,tf lua vim.lsp.buf.format()]])
 
 -- Autocompletion
 local cmp = require("cmp")
@@ -326,3 +327,25 @@ cmp.setup({
 		["<C-d>"] = cmp.mapping.scroll_docs(4),
 	}),
 })
+
+-- Custom Functions
+--- Light Mode
+function _G.light_mode()
+	vim.fn.system("kitty +kitten themes 'Rosé Pine Dawn'")
+	vim.cmd("set background=light")
+end
+
+--- Dark Mode
+function _G.dark_mode()
+	vim.fn.system("kitty +kitten themes 'Rosé Pine'")
+	vim.cmd("set background=dark")
+end
+
+-- Helper function to toggle theme
+function _G.toggle_theme()
+	if vim.o.background == "dark" then
+		_G.light_mode()
+	else
+		_G.dark_mode()
+	end
+end
