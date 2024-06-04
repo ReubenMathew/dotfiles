@@ -65,6 +65,12 @@ require("lazy").setup({
 			{ "L3MON4D3/LuaSnip" },
 		},
 	},
+	{
+		"hrsh7th/cmp-path",
+	},
+	{
+		"hrsh7th/cmp-cmdline",
+	},
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
@@ -121,6 +127,11 @@ require("lazy").setup({
 	},
 })
 
+-- Neovide Font
+if vim.g.neovide then
+	-- Put anything you want to happen only in Neovide here
+	vim.o.guifont = "CommitMono:h14"
+end
 -- todo-comments
 require("todo-comments").setup()
 
@@ -304,13 +315,24 @@ require("lspconfig").lua_ls.setup({
 
 -- Autocmds
 --- Formatting
-vim.cmd([[autocmd BufWritePre rust,go,java,html,js,sh,tf lua vim.lsp.buf.format()]])
+vim.cmd([[autocmd BufWritePre rust,go,java,html,js,sh lua vim.lsp.buf.format()]])
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+	pattern = { "*.tf", "*.tfvars" },
+	callback = function()
+		vim.lsp.buf.format()
+	end,
+})
 
 -- Autocompletion
 local cmp = require("cmp")
 local cmp_action = lsp_zero.cmp_action()
 
 cmp.setup({
+	sources = {
+		{ name = "nvim_lsp" },
+		{ name = "path" },
+		{ name = "cmdline" },
+	},
 	mapping = cmp.mapping.preset.insert({
 		-- `Enter` key to confirm completion
 		["<CR>"] = cmp.mapping.confirm({ select = false }),
