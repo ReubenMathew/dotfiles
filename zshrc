@@ -11,6 +11,14 @@ alias ssh="kitty +kitten ssh"
 alias nv="nvim"
 alias git='TZ=UTC0 git'
 
+# cd and fetch
+function cdf() {
+	builtin cd "$1" && \
+  	if [ -d .git ]; then
+    	git fetch --all
+  	fi
+}
+
 # Variables
 export EDITOR=/opt/homebrew/bin/vim
 export VISUAL=/opt/homebrew/bin/vim
