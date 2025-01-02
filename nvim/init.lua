@@ -38,6 +38,7 @@ require("lazy").setup({
 					"html",
 					"javascript",
 					"typescript",
+					"terraform",
 				},
 				sync_install = false,
 				highlight = { enable = true },
@@ -60,7 +61,7 @@ require("lazy").setup({
 	{
 		"VonHeikemen/lsp-zero.nvim",
 		branch = "v4.x",
-		--lazy = true,
+		lazy = true,
 		--config = false,
 	},
 	{
@@ -144,11 +145,17 @@ require("lazy").setup({
 		opts = {},
 	},
 	{
-		"olexsmir/gopher.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
+		"ray-x/go.nvim",
+		dependencies = { -- optional packages
+			"neovim/nvim-lspconfig",
 			"nvim-treesitter/nvim-treesitter",
 		},
+		config = function()
+			require("go").setup()
+		end,
+		event = { "CmdlineEnter" },
+		ft = { "go", "gomod" },
+		build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
 	},
 	{
 		"kylechui/nvim-surround",
@@ -167,13 +174,14 @@ require("lazy").setup({
 	{
 		"sindrets/diffview.nvim",
 	},
+	{
+		"j-hui/fidget.nvim",
+		opts = {
+			-- options
+		},
+	},
 })
 
--- Neovide Font
-if vim.g.neovide then
-	-- Put anything you want to happen only in Neovide here
-	vim.o.guifont = "CommitMono:h14"
-end
 -- todo-comments
 require("todo-comments").setup()
 
@@ -219,7 +227,9 @@ null_ls.setup({
 		null_ls.builtins.formatting.gofmt,
 		null_ls.builtins.code_actions.impl,
 		null_ls.builtins.code_actions.gomodifytags,
-		null_ls.builtins.completion.spell,
+		null_ls.builtins.completion.spell.with({
+			disabled_filetypes = { "go" },
+		}),
 		null_ls.builtins.diagnostics.shellcheck,
 	},
 })
@@ -233,7 +243,7 @@ require("rose-pine").setup({
 	dark_variant = "main",
 	bold_vert_split = false,
 	dim_nc_background = true,
-	disable_background = false,
+	disable_background = true,
 	disable_float_background = false,
 	disable_italics = true,
 
@@ -294,6 +304,8 @@ vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", { silent = true 
 vim.keymap.set("n", "<c-t>", ":Trouble diagnostics toggle<CR>", { silent = true })
 --- Toggle light/dark mode
 vim.keymap.set("n", "<leader>l", ":lua toggle_theme()<CR>", { silent = true })
+--- Open line diagnostic in floating window
+vim.keymap.set("n", "H", ":lua vim.diagnostic.open_float(nil, { focus = false })<CR>", { silent = true })
 
 -- LSP
 --- Setup
@@ -314,17 +326,30 @@ lsp_zero.extend_lspconfig({
 })
 --- Language Servers
 require("lspconfig").terraformls.setup({})
-require("lspconfig").jedi_language_server.setup({})
-require("lspconfig").yamlls.setup({})
+require("lspconfig").jedi_language_server.setup({ lazy = true })
+require("lspconfig").yamlls.setup({ lazy = true })
 require("lspconfig").bashls.setup({})
-require("lspconfig").html.setup({})
-require("lspconfig").ts_ls.setup({})
-require("lspconfig").denols.setup({})
-require("lspconfig").rust_analyzer.setup({})
-require("lspconfig").jdtls.setup({})
+require("lspconfig").html.setup({ lazy = true })
+require("lspconfig").ts_ls.setup({ lazy = true })
+require("lspconfig").denols.setup({ lazy = true })
+require("lspconfig").rust_analyzer.setup({
+	cmd = { "rust-analyzer" },
+
+	settings = {
+		["rust-analyzer"] = {
+			diagnostics = {
+				enable = false,
+			},
+		},
+	},
+	lazy = true,
+})
+require("lspconfig").jdtls.setup({
+	lazy = true,
+})
 require("lspconfig").gopls.setup({
 	cmd = { "gopls" },
-	filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl" },
+	filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl", "templ" },
 	settings = {
 		gopls = {
 			completeUnimported = true,
@@ -335,13 +360,14 @@ require("lspconfig").gopls.setup({
 				shadow = true,
 			},
 			staticcheck = true,
-			gofumpt = true,
+			gofumpt = false,
 		},
 	},
 	init_options = {
 		usePlaceholders = true,
 	},
 })
+require("lspconfig").templ.setup({})
 require("lspconfig").lua_ls.setup({
 	on_init = function(client)
 		local path = client.workspace_folders[1].name
@@ -372,6 +398,7 @@ require("lspconfig").lua_ls.setup({
 		return true
 	end,
 })
+require("lspconfig").nixd.setup({})
 
 -- Autocmds
 --- Formatting
@@ -382,9 +409,29 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		vim.lsp.buf.format()
 	end,
 })
+--- Treesitter
+vim.api.nvim_create_autocmd({ "InsertLeave", "InsertEnter" }, {
+	pattern = "*",
+	callback = function()
+		if vim.api.nvim_buf_line_count(0) > 8000 then
+			vim.cmd("TSToggle highlight")
+		end
+	end,
+})
+
+-- Diagnostics config
 --- Show line diagnostics automatically in hover window
 vim.diagnostic.config({
 	virtual_text = false,
+	underline = true,
+	signs = true,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {
+		source = true,
+		border = "rounded",
+		scope = "cursor",
+	},
 })
 --vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 
@@ -473,6 +520,7 @@ cmp.setup({
 require("luasnip.loaders.from_vscode").lazy_load({
 	include = {
 		"go",
+		"rust",
 		"lua",
 		"sh",
 	},

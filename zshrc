@@ -5,11 +5,12 @@ alias which-command=whence
 alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
 alias python='python3'
-alias a='cd ~/Developer/log && kitty @ set-tab-title Log && vim ~/Developer/log/worklog/06-2024.md'
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/01-2025.md'
 alias ag='git add worklog && git commit -m "auto entry" && git push'
-alias ssh="kitty +kitten ssh"
+#alias ssh="kitten ssh"
 alias nv="nvim"
 alias git='TZ=UTC0 git'
+alias n='nix-shell $HOME/shell.nix'
 
 # cd and fetch
 function cdf() {
@@ -63,3 +64,7 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 # End Nix
 
+eval "$(atuin init zsh)"
+
+# Synadia specific settings and vars
+export AWS_PROFILE=synadia
