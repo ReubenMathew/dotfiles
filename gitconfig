@@ -14,9 +14,43 @@
 		format = ssh
 
 [alias]
-    graph = log --oneline --graph --decorate
+    graph = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all -n 15
     fa = fetch --all
     ff = merge --ff-only
     cs = commit -s -S -m 
 		slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
+    s = status
+    cfh = commit --fixup=HEAD
+    rom = rebase -i --autosquash origin/main
 
+[commit]
+	gpgsign = true
+	signgpg = false
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+
+    # delta detects terminal colors automatically; set one of these to disable auto-detection
+    # dark = true
+    # light = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+[init]
+	defaultBranch = main
+
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[url "https://@github.com/"]
+	insteadOf = https://github.com/

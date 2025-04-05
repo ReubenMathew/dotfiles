@@ -70,6 +70,15 @@ require("lazy").setup({
 			{ "hrsh7th/cmp-nvim-lsp" },
 		},
 	},
+	{
+		"stevearc/aerial.nvim",
+		opts = {},
+		-- Optional dependencies
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+	},
 	--- Autocompletion
 	{
 		"hrsh7th/nvim-cmp",
@@ -122,7 +131,7 @@ require("lazy").setup({
 		end,
 	},
 	{ "lewis6991/gitsigns.nvim" },
-	{ "nvim-treesitter/nvim-treesitter-context" },
+	--{ "nvim-treesitter/nvim-treesitter-context" },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "ColorScheme",
@@ -135,7 +144,7 @@ require("lazy").setup({
 			})
 		end,
 	},
-	{ "github/copilot.vim" },
+	--{ "github/copilot.vim" },
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
@@ -182,6 +191,22 @@ require("lazy").setup({
 	},
 })
 
+-- aerial
+require("aerial").setup({
+	-- optionally use on_attach to set keymaps when aerial has attached to a buffer
+	on_attach = function(bufnr)
+		-- Jump forwards/backwards with '{' and '}'
+		vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+		vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+	end,
+	show_guides = true,
+	--min_width = 35,
+	--max_width = 35,
+	highlight_on_jump = 0,
+})
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set("n", "<leader>f", "<cmd>AerialToggle!<CR>")
+
 -- todo-comments
 require("todo-comments").setup()
 
@@ -197,7 +222,7 @@ require("lualine").setup({
 		},
 		lualine_b = { "filename", "branch" },
 		lualine_c = { "diagnostics", "diff" },
-		lualine_x = {},
+		lualine_x = { "aerial" },
 		lualine_y = { "filetype", "fileformat", "progress" },
 		lualine_z = {
 			{ "location", separator = { right = "" }, left_padding = 2 },
@@ -219,20 +244,20 @@ require("lualine").setup({
 require("gitsigns").setup()
 
 -- null-ls
-local null_ls = require("null-ls")
-null_ls.setup({
-	sources = {
-		null_ls.builtins.formatting.rustfmt,
-		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.gofmt,
-		null_ls.builtins.code_actions.impl,
-		null_ls.builtins.code_actions.gomodifytags,
-		null_ls.builtins.completion.spell.with({
-			disabled_filetypes = { "go" },
-		}),
-		null_ls.builtins.diagnostics.shellcheck,
-	},
-})
+--local null_ls = require("null-ls")
+--null_ls.setup({
+--sources = {
+--null_ls.builtins.formatting.rustfmt,
+--null_ls.builtins.formatting.stylua,
+--null_ls.builtins.formatting.gofmt,
+--null_ls.builtins.code_actions.impl,
+--null_ls.builtins.code_actions.gomodifytags,
+--null_ls.builtins.completion.spell.with({
+--disabled_filetypes = { "go" },
+--}),
+--null_ls.builtins.diagnostics.shellcheck,
+--},
+--})
 
 -- Colorscheme
 --- Config
@@ -282,7 +307,7 @@ vim.o.updatetime = 50
 vim.o.laststatus = 3 -- Or 3 for global statusline
 vim.o.statusline = " %f %m %= %l:%c "
 -- Copilot
-vim.g.copilot_enabled = false
+--vim.g.copilot_enabled = false
 -- Undo
 vim.o.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.o.undofile = true

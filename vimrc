@@ -63,9 +63,7 @@ Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 Plug 'preservim/nerdtree'
 Plug 'preservim/nerdcommenter'
 Plug 'ryanoasis/vim-devicons'
-Plug 'wellle/context.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'vitalk/vim-simple-todo'
 Plug 'rhysd/conflict-marker.vim'
 
 " Fuzzy Finder
@@ -78,6 +76,12 @@ Plug 'josa42/vim-lightline-coc'
 
 " Colorscheme
 Plug 'rose-pine/vim'
+
+" Markdown
+Plug 'vitalk/vim-simple-todo'
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
+
 call plug#end()
 
 " ----------------------------------
@@ -152,6 +156,9 @@ augroup vimrc_autocmd
   autocmd!
   " Markdown tab settings
   autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType markdown setlocal spell
+  autocmd FileType markdown setlocal nonumber
+  autocmd FileType markdown hi SpellBad cterm=underline
   " Set dockerfile syntax
   autocmd BufNewFile,BufRead Dockerfile* set syntax=dockerfile
 augroup END
@@ -185,3 +192,36 @@ let g:copilot_enabled = v:false
 " ------------------------------------------------"
 " Simple Todo
 let g:simple_todo_list_symbol = '-'
+
+" ------------------------------------------------"
+" Markdown
+" Enable folding.
+let g:vim_markdown_folding_disabled = 1
+
+" Fold heading in with the contents.
+let g:vim_markdown_folding_style_pythonic = 1
+
+" Don't use the shipped key bindings.
+let g:vim_markdown_no_default_key_mappings = 1
+
+" Autoshrink TOCs.
+let g:vim_markdown_toc_autofit = 1
+
+" Indentation for new lists. We don't insert bullets as it doesn't play
+" nicely with `gq` formatting. It relies on a hack of treating bullets
+" as comment characters.
+" See https://github.com/plasticboy/vim-markdown/issues/232
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_auto_insert_bullets = 0
+
+" Filetype names and aliases for fenced code blocks.
+let g:vim_markdown_fenced_languages = ['php', 'py=python', 'js=javascript', 'bash=sh', 'viml=vim']
+
+" Highlight front matter (useful for Hugo posts).
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+let g:vim_markdown_frontmatter = 1
+
+" Format strike-through text (wrapped in `~~`).
+let g:vim_markdown_strikethrough = 0
+
