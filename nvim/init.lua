@@ -243,22 +243,6 @@ require("lualine").setup({
 -- gitsigns
 require("gitsigns").setup()
 
--- null-ls
---local null_ls = require("null-ls")
---null_ls.setup({
---sources = {
---null_ls.builtins.formatting.rustfmt,
---null_ls.builtins.formatting.stylua,
---null_ls.builtins.formatting.gofmt,
---null_ls.builtins.code_actions.impl,
---null_ls.builtins.code_actions.gomodifytags,
---null_ls.builtins.completion.spell.with({
---disabled_filetypes = { "go" },
---}),
---null_ls.builtins.diagnostics.shellcheck,
---},
---})
-
 -- Colorscheme
 --- Config
 require("rose-pine").setup({
@@ -296,7 +280,7 @@ vim.o.shiftwidth = vim.o.tabstop
 --vim.o.nocompatible = true
 vim.o.wildmenu = true
 vim.o.autoindent = true
-vim.o.shell = "/bin/bash"
+vim.o.shell = "/bin/zsh"
 vim.o.number = true
 vim.o.clipboard = "unnamed"
 vim.o.termguicolors = true
@@ -327,8 +311,6 @@ vim.keymap.set("n", "<c-f>", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>t", ":NvimTreeFindFileToggle<CR>", { silent = true })
 --- Trouble
 vim.keymap.set("n", "<c-t>", ":Trouble diagnostics toggle<CR>", { silent = true })
---- Toggle light/dark mode
-vim.keymap.set("n", "<leader>l", ":lua toggle_theme()<CR>", { silent = true })
 --- Open line diagnostic in floating window
 vim.keymap.set("n", "H", ":lua vim.diagnostic.open_float(nil, { focus = false })<CR>", { silent = true })
 
@@ -550,25 +532,3 @@ require("luasnip.loaders.from_vscode").lazy_load({
 		"sh",
 	},
 })
-
--- Custom Functions
---- Light Mode
-function _G.light_mode()
-	vim.fn.system("kitty +kitten themes 'Rosé Pine Dawn'")
-	vim.cmd("set background=light")
-end
-
---- Dark Mode
-function _G.dark_mode()
-	vim.fn.system("kitty +kitten themes 'Rosé Pine'")
-	vim.cmd("set background=dark")
-end
-
--- Helper function to toggle theme
-function _G.toggle_theme()
-	if vim.o.background == "dark" then
-		_G.light_mode()
-	else
-		_G.dark_mode()
-	end
-end
