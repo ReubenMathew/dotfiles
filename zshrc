@@ -5,7 +5,7 @@ alias which-command=whence
 alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
 alias python='python3'
-alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/04-2025.md'
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/05-2025.md'
 alias ag='git add worklog && git commit -m "auto entry" && git push'
 #alias ssh="kitten ssh"
 alias nv="nvim"
@@ -28,12 +28,17 @@ export XDG_CONFIG_HOME=/Users/reubenninan/.config
 export JAVA_HOME=$(/usr/libexec/java_home -v 18.0)
 
 # PATH
-export PATH="/Users/reubenninan/.krew/bin:/Users/reubenninan/.gem/ruby/3.1.3/bin:/Users/reubenninan/.rubies/ruby-3.1.3/lib/ruby/gems/3.1.0/bin:/Users/reubenninan/.rubies/ruby-3.1.3/bin:/usr/local/opt/llvm/bin:/Users/reubenninan/go/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/reubenninan/.cargo/bin:/Users/reubenninan/bin:$PATH"
+export PATH="/usr/local/opt/llvm/bin:/Users/reubenninan/go/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/reubenninan/.cargo/bin:/Users/reubenninan/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 # Cmake
 export PATH="/Applications/CMake.app/Contents/bin:$PATH"
 
 # Starship
+if [[ "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select" || \
+      "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select-wrapped" ]]; then
+    zle -N zle-keymap-select "";
+fi
+
 eval "$(starship init zsh)"
 export STARSHIP_SHELL=zsh
 

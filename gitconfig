@@ -24,7 +24,7 @@
     rom = rebase -i --autosquash origin/main
 
 [commit]
-	gpgsign = true
+	gpgsign = false
 	signgpg = false
 
 [core]
