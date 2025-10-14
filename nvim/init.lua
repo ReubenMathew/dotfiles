@@ -23,6 +23,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		config = function()
+
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
@@ -127,7 +128,7 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			require("nvim-tree").setup({})
+      require("nvim-tree").setup({})
 		end,
 	},
 	{ "lewis6991/gitsigns.nvim" },
@@ -243,6 +244,7 @@ require("lualine").setup({
 -- gitsigns
 require("gitsigns").setup()
 
+
 -- Colorscheme
 --- Config
 require("rose-pine").setup({
@@ -332,14 +334,14 @@ lsp_zero.extend_lspconfig({
 	sign_text = true,
 })
 --- Language Servers
-require("lspconfig").terraformls.setup({})
-require("lspconfig").jedi_language_server.setup({ lazy = true })
-require("lspconfig").yamlls.setup({ lazy = true })
-require("lspconfig").bashls.setup({})
-require("lspconfig").html.setup({ lazy = true })
-require("lspconfig").ts_ls.setup({ lazy = true })
-require("lspconfig").denols.setup({ lazy = true })
-require("lspconfig").rust_analyzer.setup({
+vim.lsp.config("lspconfig", {})
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("lspconfig", {})
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("lspconfig", {
 	cmd = { "rust-analyzer" },
 
 	settings = {
@@ -351,10 +353,8 @@ require("lspconfig").rust_analyzer.setup({
 	},
 	lazy = true,
 })
-require("lspconfig").jdtls.setup({
-	lazy = true,
-})
-require("lspconfig").gopls.setup({
+vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("gopls", {
 	cmd = { "gopls" },
 	filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl", "templ" },
 	settings = {
@@ -374,8 +374,8 @@ require("lspconfig").gopls.setup({
 		usePlaceholders = true,
 	},
 })
-require("lspconfig").templ.setup({})
-require("lspconfig").lua_ls.setup({
+vim.lsp.config('templ', {})
+vim.lsp.config('lua_ls', {
 	on_init = function(client)
 		local path = client.workspace_folders[1].name
 		if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
@@ -405,7 +405,7 @@ require("lspconfig").lua_ls.setup({
 		return true
 	end,
 })
-require("lspconfig").nixd.setup({})
+vim.lsp.config('nixd', {})
 
 -- Autocmds
 --- Formatting
