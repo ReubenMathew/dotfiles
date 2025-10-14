@@ -14,7 +14,7 @@ window-padding-balance = true
 window-theme = auto
 
 # theme
-theme = dark:rose-pine,light:rose-pine-dawn
+theme = light:Rose Pine Dawn,dark:Rose Pine
 palette = 2=#31748f
 palette = 10=#31748f
 palette = 4=#9ccfd8
@@ -35,7 +35,6 @@ macos-titlebar-proxy-icon = hidden
 
 # keybinds
 keybind = super+enter=new_split:right
-keybind = super+shift+enter=new_split:down
 keybind = alt+shift+up=resize_split:up,10
 keybind = alt+shift+down=resize_split:down,10
 keybind = alt+shift+left=resize_split:left,10
