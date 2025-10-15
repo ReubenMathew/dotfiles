@@ -334,14 +334,15 @@ lsp_zero.extend_lspconfig({
 	sign_text = true,
 })
 --- Language Servers
-vim.lsp.config("lspconfig", {})
-vim.lsp.config("lspconfig", { lazy = true })
-vim.lsp.config("lspconfig", { lazy = true })
-vim.lsp.config("lspconfig", {})
-vim.lsp.config("lspconfig", { lazy = true })
-vim.lsp.config("lspconfig", { lazy = true })
-vim.lsp.config("lspconfig", { lazy = true })
-vim.lsp.config("lspconfig", {
+---
+vim.lsp.config("terraformls", {})
+vim.lsp.config("jedi_language_server", { lazy = true })
+vim.lsp.config("yamlls", { lazy = true })
+vim.lsp.config("bashls", {})
+vim.lsp.config("html", { lazy = true })
+vim.lsp.config("ts_ls", { lazy = true })
+vim.lsp.config("denols", { lazy = true })
+vim.lsp.config("rust_analyzer", {
 	cmd = { "rust-analyzer" },
 
 	settings = {
@@ -353,7 +354,7 @@ vim.lsp.config("lspconfig", {
 	},
 	lazy = true,
 })
-vim.lsp.config("lspconfig", { lazy = true })
+vim.lsp.config("jdtls", { lazy = true })
 vim.lsp.config("gopls", {
 	cmd = { "gopls" },
 	filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl", "templ" },
@@ -406,6 +407,26 @@ vim.lsp.config('lua_ls', {
 	end,
 })
 vim.lsp.config('nixd', {})
+
+-- Enable all configured language servers
+local servers = {
+	'terraformls',
+	'yamlls',
+	'bashls',
+	'html',
+	--'ts_ls',
+	--'denols', -- Uncomment if you want to use Deno instead of ts_ls
+	'rust_analyzer',
+	--'jdtls',
+	'gopls',
+	--'templ',
+	'lua_ls',
+	'nixd',
+}
+
+for _, server in ipairs(servers) do
+	vim.lsp.enable(server)
+end
 
 -- Autocmds
 --- Formatting
