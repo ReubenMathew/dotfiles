@@ -18,10 +18,11 @@
     fa = fetch --all
     ff = merge --ff-only
     cs = commit -s -S -m 
-		slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
+	slog = log --graph --all --topo-order --pretty='format:%h %ai %s%d (%an)'
     s = status
     cfh = commit --fixup=HEAD
     rom = rebase -i --autosquash origin/main
+	sign = filter-branch --commit-filter 'git commit-tree -S "$@";' -- --all
 
 [commit]
 	gpgsign = false

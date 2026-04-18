@@ -14,7 +14,7 @@ window-padding-balance = true
 window-theme = auto
 
 # theme
-theme = light:Rose Pine Dawn,dark:Rose Pine
+theme = Rose Pine
 palette = 2=#31748f
 palette = 10=#31748f
 palette = 4=#9ccfd8

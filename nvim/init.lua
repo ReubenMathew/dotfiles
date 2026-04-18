@@ -23,7 +23,6 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		config = function()
-
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
@@ -33,6 +32,7 @@ require("lazy").setup({
 					"vim",
 					"vimdoc",
 					"go",
+					"python",
 					"rust",
 					"css",
 					"javascript",
@@ -128,7 +128,7 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-      require("nvim-tree").setup({})
+			require("nvim-tree").setup({})
 		end,
 	},
 	{ "lewis6991/gitsigns.nvim" },
@@ -336,7 +336,6 @@ lsp_zero.extend_lspconfig({
 --- Language Servers
 ---
 vim.lsp.config("terraformls", {})
-vim.lsp.config("jedi_language_server", { lazy = true })
 vim.lsp.config("yamlls", { lazy = true })
 vim.lsp.config("bashls", {})
 vim.lsp.config("html", { lazy = true })
@@ -355,6 +354,19 @@ vim.lsp.config("rust_analyzer", {
 	lazy = true,
 })
 vim.lsp.config("jdtls", { lazy = true })
+vim.lsp.config("pyright", {
+	settings = {
+		python = {
+			analysis = {
+				typeCheckingMode = "basic", -- or "strict" if you want pain
+				autoSearchPaths = false,
+				useLibraryCodeForTypes = true,
+				diagnosticMode = "workspace",
+			},
+		},
+	},
+	lazy = true
+})
 vim.lsp.config("gopls", {
 	cmd = { "gopls" },
 	filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl", "templ" },
@@ -417,8 +429,9 @@ local servers = {
 	--'ts_ls',
 	--'denols', -- Uncomment if you want to use Deno instead of ts_ls
 	'rust_analyzer',
-	--'jdtls',
+	'jdtls',
 	'gopls',
+	"pyright",
 	--'templ',
 	'lua_ls',
 	'nixd',

@@ -3,6 +3,7 @@ ${custom.git_config_email}\
 $directory\
 $git_branch\
 $git_status\
+${custom.gowork}\
 ${custom.git_wip}\
 $fill\
 $c\
@@ -193,3 +194,10 @@ format = "[](fg:overlay)[$symbol$version]($style)[](fg:overlay) "
 disabled = false
 symbol = ' '
 
+[custom.gowork]
+command = "echo 'GOWORK'"
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && [ \"$GOWORK\" != \"off\" ]"
+description = "Warn if GOWORK is not 'off'"
+symbol = "🚧"
+format = " [$symbol $output $symbol]($style)"
+style = "bold red"

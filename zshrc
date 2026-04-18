@@ -1,11 +1,12 @@
 # Aliases
 alias dc=docker-compose
+alias pc=process-compose
 alias run-help=man
 alias which-command=whence
 alias l='ls -l'
 alias cdt='cd $(mktemp -d)'
 alias python='python3'
-alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/05-2025.md'
+alias a='cd ~/Developer/log && vim ~/Developer/log/worklog/03-2026.md'
 alias ag='git add worklog && git commit -m "auto entry" && git push'
 #alias ssh="kitten ssh"
 alias nv="nvim"
@@ -54,9 +55,6 @@ bindkey '\e[B' history-search-forward
 ENABLE_CORRECTION="true"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# Kubectl Autocomplete;
-source <(kubectl completion zsh)
-
 # Misc
 setopt NO_BEEP
 
@@ -70,9 +68,6 @@ fi
 # End Nix
 
 eval "$(atuin init zsh)"
-
-# Synadia specific settings and vars
-export AWS_PROFILE=synadia
 
 # Starship theme
 starship config palette "$( [[ $(defaults read -g AppleInterfaceStyle 2>/dev/null) == "Dark" ]] && echo rose-pine || echo rose-pine-dawn )"
